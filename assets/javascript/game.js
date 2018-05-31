@@ -35,28 +35,114 @@ var underScore = [];
 var userGuesses = [];
 var randomWord = Math.floor(Math.random() * characters.length);
 var chosenCharacter = characters[randomWord];
-console.log(chosenCharacter);
+console.log("We're guessing: " + chosenCharacter);
 var winCount = 0;
-var remainingLetters = randomWord.length;
+var remainingLetters = chosenCharacter.length;
+console.log("Num of letters you should be guessing " + remainingLetters)
+
+var lettersToChoose = chosenCharacter.split('')
+var numOfLettersToChoose = lettersToChoose.length
+console.log(lettersToChoose)
+
+var correctGuesses = [];
+for (var u = 0; u < lettersToChoose.length; u++) {
+    correctGuesses.push("-");
+}
+
+
+var guessInput = document.getElementById("userGuessInput");
+var guessButton = document.getElementById("userGuessButton");
+
+var $userguesses = document.getElementById("underscore");
+var $wrongGuesses = document.getElementById("wrong-guesses")
+
+
+guessButton.addEventListener("click", function(event) {
+    //("Got clicked!");
+
+    var guess = guessInput.value;
+    //alert(guess)
+
+    getAndCheckUserGuess(guess)
+    guessInput.value = ""
+
+});
+
 
 /*Issues remaining: 
     1) the i in Cersei and Khaleesi is allowing correct guess
         before actually typed in
     2) the underscores are not being populated with the letters chosen
     3) Guesses left not counting down properly
-    4) How to make Wins/Losses work--Wrong Guesses as well
-*/
+    4) How to make Wins/Losses work--Wrong Guesses as well*/
+
+
+
+function removeDuplicates(arr){
+    let unique_array = []
+    for(let i = 0;i < arr.length; i++){
+        if(unique_array.indexOf(arr[i]) == -1){
+            unique_array.push(arr[i])
+        }
+    }
+    return unique_array
+}
+
+
+function getAndCheckUserGuess(userGuess) {
+    // We know the word to pick letters from => lettersToChoose
+    // We need the user's guess
+    // var userGuess = prompt("Player, guess a letter.");
+    // We need to find whether their guess is in lettersToChoose arr
+
+
+    for (var g = 0; g < lettersToChoose.length; g++) {
+        if (userGuess == lettersToChoose[g]) {
+            // Does their guess match item g in array?
+            // yep, found one
+            correctGuesses[g] = userGuess;
+            numOfLettersToChoose--;
+            console.log("You guessed right!")
+        } else {
+            // Nope, not this letter
+            wrongLetter.push(userGuess);
+            console.log("Nope...")
+        }
+        userGuesses.push(userGuess);
+    }
+
+
+    console.log(correctGuesses);
+    $userguesses.innerHTML = correctGuesses;
+
+
     
+    $wrongGuesses.innerHTML = removeDuplicates(wrongLetter).length
+    return numOfLettersToChoose;
+}
+
+
+// for (var j = numOfLettersToChoose; j > 0; j--)
+//     if (numOfLettersToChoose == 0) {
+//         alert("You've won!");
+//     } else {
+//         getAndCheckUserGuess()
+//     }
+
+
+
+
+
 
 //functions
-function startGame() {
+/*function startGame() {
     //picks random character
     randomWord = characters[Math.floor(Math.random() * characters.length)];
 
     for (var z = 0; z < chosenCharacter.length; z++) {
         //underScore.push('_');
         console.log(underScore);
-     //underscore = underScore + '_ ';
+        //underscore = underScore + '_ ';
         underScore[z] = "_";
 
     }
@@ -65,32 +151,45 @@ function startGame() {
          for (var i = 0; i < chosenCharacter.length; i++) {
              //underScore.push(" _ ");
              underscore = underScore + '_ ';*/
+//while (wrongLetter < 3 && underScore.indexOf("_") >= 0) {
 
-    //printing underscores to screen?
-   // document.getElementById("underscore").textContent = underScore.join(" ");
-            alert(underScore.join(" "));
-    //reset
-    //this.alert.wins++;
-    //this.alert(losses--);
-    wrongLetter = [];
+//printing underscores to screen?
+// document.getElementById("underscore").textContent = underScore.join(" ");
+//
+//if (word.indexOf(letter) < 0) {
+// add a strike
+//wrongLetter++;
+// alert("");
+//reset
+//this.alert.wins++;
+//this.alert(losses--);
+/* wrongLetter = [];
     guessesLeft = 10;
     console.log(guessesLeft);
 
     //HTML
     guessesLeft--;
     document.getElementById('guesses-left').innerHTML = guessesLeft;
+    winLose()
 }
 
+
 function winLose() {
- //   console.log(chosenCharacter.length);
+
+    var letter = prompt(underScore.join(" ") + "\n\n" + "Player, Guess a letter.");
+    //   console.log(chosenCharacter.length);
     if (winCount === chosenCharacter.length) {
+        
         alert('You Survive... this time!');
-        startGame();
-    
+        //startGame();
+        
+
     } else if (guessesLeft === 0) {
         alert('You shall not sit on the throne!');
-        startGame();
+        //startGame();
     }
+
+    console.log("end o fwinlosemethod")
 }
 
 document.onkeyup = function (event) {
@@ -101,8 +200,8 @@ document.onkeyup = function (event) {
         for (var z = 0; z < chosenCharacter.length; z++) {
             if (chosenCharacter[z] === userGuesses) {
                 underScore[z] = userGuesses;
-            //    console.log(underScore[z]);
-                
+                //console.log(underScore[z]);
+
                 winCount++;
                 console.log(winCount);
                 winLose();
@@ -225,7 +324,6 @@ document.addEventListener('keypress', (event) => {
 
 });
 
-Louis Heimel (TA) [2:48 PM]
 'asdfasdf'.split('')
 (8) ["a", "s", "d", "f", "a", "s", "d", "f"]
 characterArr = 'cersei'.split('')
